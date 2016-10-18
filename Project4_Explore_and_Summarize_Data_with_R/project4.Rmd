@@ -24,11 +24,25 @@ dim(wines)
 names(wines)
 str(wines)
 summary(wines)
+qplot(data = wines, x = quality)
+qplot(data = wines, x = fixed.acidity)
+qplot(data = wines, x = volatile.acidity)
+qplot(data = wines, x = residual.sugar)
+qplot(data = wines, x = chlorides)
+qplot(data = wines, x = free.sulfur.dioxide)
+qplot(data = wines, x = total.sulfur.dioxide)
+qplot(data = wines, x = density)
+qplot(data = wines, x = pH)
+qplot(data = wines, x = sulphates)
+qplot(data = wines, x = alcohol)
+summary(wines$quality)
+table(wines$quality)
 ```
 
 # Univariate Analysis
 
 ### What is the structure of your dataset?
+This dataset has 1599 observations and 13 variables.
 
 ### What is/are the main feature(s) of interest in your dataset?
 
@@ -42,7 +56,43 @@ summary(wines)
 
 # Bivariate Plots Section
 ```{r echo=FALSE, Bivariate_Plots}
+ggplot(aes(x=fixed.acidity, y=quality), data=wines) +
+    geom_point() 
 
+ggplot(aes(x=volatile.acidity, y=quality), data=wines) +
+    geom_point() 
+
+ggplot(aes(x=citric.acid, y=quality), data=wines) +
+    geom_point() 
+
+ggplot(aes(x=residual.sugar, y=quality), data=wines) +
+    geom_point() 
+
+ggplot(aes(x=chlorides, y=quality), data=wines) +
+    geom_point() 
+
+ggplot(aes(x=free.sulfur.dioxide, y=quality), data=wines) +
+    geom_point() 
+
+ggplot(aes(x=total.sulfur.dioxide, y=quality), data=wines) +
+    geom_point() 
+
+ggplot(aes(x=density, y=quality), data=wines) +
+    geom_point() 
+
+ggplot(aes(x=pH, y=quality), data=wines) +
+    geom_point()
+
+ggplot(aes(x=sulphates, y=quality), data=wines) +
+    geom_point()
+
+ggplot(aes(x=alcohol, y=quality), data=wines) +
+    geom_point()
+
+qplot(data = wines, x = alcohol) +
+  facet_wrap(~quality)
+qplot(data = wines, x = pH) +
+  facet_wrap(~quality)
 ```
 
 # Bivariate Analysis
