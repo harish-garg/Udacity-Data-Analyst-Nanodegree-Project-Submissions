@@ -1,5 +1,4 @@
-http://wiki.openstreetmap.org/wiki/Main_Page
-http://wiki.openstreetmap.org/wiki/OSM_XML
-https://mapzen.com/
-
-
+* http://wiki.openstreetmap.org/wiki/Main_Page
+* http://wiki.openstreetmap.org/wiki/OSM_XML
+* https://mapzen.com/
+* Udacity Data Analyst Nanodegree
