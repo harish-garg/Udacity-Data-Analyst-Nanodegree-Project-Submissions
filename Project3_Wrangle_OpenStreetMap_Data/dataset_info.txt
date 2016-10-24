@@ -1,0 +1,15 @@
+For this project, I chose Bengaluru, India metro area.
+
+The reason I chose is as I am a resident of bengaluru from last 13 years. However, it still keep discoving new areas in this city and thought choosing this area for this project will be a dual learning experience for me - know my current city more as well as finish the project.
+
+ 
+The export link from openstreetmap website directed me to https://mapzen.com/data/metro-extracts/metro/bengaluru_india/
+
+Here, I downloaded the bengaluru_india.osm.bz2 file.
+
+The download size of the archived dataset is 38M
+
+The unachived dataset size is 610M
+
+
+
