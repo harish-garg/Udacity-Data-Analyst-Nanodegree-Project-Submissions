@@ -1,0 +1,31 @@
+Project Overview¶
+
+Name of the project: Wrangle OpenStreepMap Data for a chosen map area
+
+Purpose of the project: This project is created for Udacity Data Analyst NanoDegree
+
+Created by:Harish Garg(harish.garg@gmail.com)
+
+Created date: Oct 244h, 2016
+---------------------------------------------------------
+About the Map Area
+
+Bengaluru, India
+
+https://mapzen.com/data/metro-extracts/metro/bengaluru_india/
+
+The reason I chose is as I am a resident of bengaluru from last 13 years. However, it still keep discoving new areas in this city and thought choosing this area for this project will be a dual learning experience for me - know my current city more as well as finish the project.
+---------------------------------------------------------
+Problems encountered in the map
+
+First thing, the full data file is very large. I tried running the code on the full file. and it took really a long time.
+So I decided create a smaller sample using the pythin script, provided by Udacity. This gave me a 60 MB file(approx 1//10th of the original)
+
+---------------------------------------------------------
+Overview of the Data
+size of the file(archived): 38M size of the file(unarchived): 610M number of unique users: number of nodes and ways: number of chosen type of nodes, like cafes, shops etc.
+
+---------------------------------------------------------
+Other ideas about the datasets
+
+---------------------------------------------------------
