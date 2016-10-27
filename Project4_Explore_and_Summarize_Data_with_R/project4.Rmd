@@ -10,6 +10,7 @@ Red Wine Quality analysis by Harish Garg
 # You should set echo=FALSE for all code chunks in your file.
 
 library(ggplot2)
+
 ```
 
 ```{r echo=FALSE, Load_the_Data}
