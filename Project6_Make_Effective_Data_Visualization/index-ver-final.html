@@ -2,8 +2,8 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-  <script src="http://d3js.org/d3.v3.min.js"></script>
-  <script src="http://dimplejs.org/dist/dimple.v2.1.6.min.js"></script>
+  <script src="https://d3js.org/d3.v3.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dimple/2.1.6/dimple.latest.min.js"></script>
   <style>
       .chart, h1, h3 {
         text-align: center;
@@ -15,9 +15,33 @@
 <h3>Created by: Harish Garg(harish.garg@gmail.com)</h3>
 <div>
 <p>
-<b>Summary:</b> Purpose of this project is to visual Titanic survival data using dimple.js framework.
+<b>Summary:</b> Purpose of this project is to visualize Titanic survival data using dimple.js framework.
 </p>
 </div>
+
+<h2 class="chart">Survival by Sex</h2>
+<div id="chartContainer" class="chart">
+  <script src="/lib/d3.v3.4.8.js"></script>
+  <script src="http://dimplejs.org/dist/dimple.v2.2.0.min.js"></script>
+  <script type="text/javascript">
+    var svg = dimple.newSvg("#chartContainer", 590, 400);
+      d3.csv("data/sex_counts.csv", function (data) {
+        var myChart = new dimple.chart(svg, data);
+        myChart.setBounds(60, 30, 500, 330)
+        myChart.addMeasureAxis("p", "Count");
+        myChart.addSeries(["Sex", "Survived"], dimple.plot.pie);
+        myChart.addLegend(200, 10, 360, 20, "right");
+        myChart.draw();
+      });
+  </script>
+</div>
+
+<div>
+<p>
+<b>Observation:</b> Higher proporation of females seem to have survived than males.
+</p>
+</div>
+
 <h2 class="chart">Survival rate by Age</h2>
 <div id="chartContainer1" class="chart">
    <script type="text/javascript">
@@ -50,7 +74,8 @@
       myChart.setBounds(60, 30, 510, 305)
       myChart.addCategoryAxis("x", ["Sex", "Class"]);
       myChart.addMeasureAxis("y", "Survival rate %");
-      myChart.addSeries(null, dimple.plot.bar);
+      myChart.addSeries("Class", dimple.plot.bar);
+      myChart.addLegend(65, 10, 510, 20, "right");
       myChart.draw();  
     });
   </script>
