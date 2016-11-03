@@ -10,7 +10,7 @@ Red Wine Quality analysis by Harish Garg
 # You should set echo=FALSE for all code chunks in your file.
 
 library(ggplot2)
-
+library(gridExtra)
 ```
 
 ```{r echo=FALSE, Load_the_Data}
@@ -43,81 +43,130 @@ table(wines$quality)
 # Univariate Analysis
 
 ### What is the structure of your dataset?
-This dataset has 1599 observations and 13 variables.
+This dataset has 1599 observations and 13 variables. These 1599 observations correspond to 1599 types of red wines. 
 
 ### What is/are the main feature(s) of interest in your dataset?
+* "quality" is the dependent variable.
+* Rest of the 12 variables are independent variables.
+We will using the how the 12 independent variables relate to the depedent variable i.e. quality.
 
 ### What other features in the dataset do you think will help support your investigation into your feature(s) of interest?
+Let's begin with finding the correlation between each independent variable and the depedent variable.
+
+```{r}
+abs(round(cor(wines),3))[-12,"quality"]
+```
+
+Results seems to suggest we don't none of the indepedent variables have strong correlation with the quality. So, we would need to work with mutiple independent variables to see if we get a stronger correlation with quality.
 
 ### Did you create any new variables from existing variables in the dataset?
+Not yet. Maybe will update this section, if I do create more variables.
 
 ### Of the features you investigated, were there any unusual distributions? Did you perform any operations on the data to tidy, adjust, or change the form of the data? If so, why did you do this?
 
+We are going to turn the quality variable into a factor as this will help us make it a classfication problem.
 
+```{r}
+wines$quality = as.factor(wines$quality)
+
+summary(wines$quality)
+table(wines$quality)
+```
 
 # Bivariate Plots Section
 ```{r echo=FALSE, Bivariate_Plots}
-ggplot(aes(x=fixed.acidity, y=quality), data=wines) +
-    geom_point() 
+ggplot(aes(y=fixed.acidity, x=quality), data=wines) +
+    geom_boxplot()
 
-ggplot(aes(x=volatile.acidity, y=quality), data=wines) +
-    geom_point() 
+ggplot(aes(y=volatile.acidity, x=quality), data=wines) +
+    geom_boxplot()
 
-ggplot(aes(x=citric.acid, y=quality), data=wines) +
-    geom_point() 
+ggplot(aes(y=citric.acid, x=quality), data=wines) +
+    geom_boxplot()
 
-ggplot(aes(x=residual.sugar, y=quality), data=wines) +
-    geom_point() 
+ggplot(aes(y=residual.sugar, x=quality), data=wines) +
+    geom_boxplot()
 
-ggplot(aes(x=chlorides, y=quality), data=wines) +
-    geom_point() 
+ggplot(aes(y=chlorides, x=quality), data=wines) +
+    geom_boxplot()
 
-ggplot(aes(x=free.sulfur.dioxide, y=quality), data=wines) +
-    geom_point() 
+ggplot(aes(y=free.sulfur.dioxide, x=quality), data=wines) +
+    geom_boxplot()
 
-ggplot(aes(x=total.sulfur.dioxide, y=quality), data=wines) +
-    geom_point() 
+ggplot(aes(y=total.sulfur.dioxide, x=quality), data=wines) +
+    geom_boxplot()
 
-ggplot(aes(x=density, y=quality), data=wines) +
-    geom_point() 
+ggplot(aes(y=density, x=quality), data=wines) +
+    geom_boxplot()
 
-ggplot(aes(x=pH, y=quality), data=wines) +
-    geom_point()
+ggplot(aes(y=pH, x=quality), data=wines) +
+    geom_boxplot()
 
-ggplot(aes(x=sulphates, y=quality), data=wines) +
-    geom_point()
+ggplot(aes(y=sulphates, x=quality), data=wines) +
+    geom_boxplot()
 
-ggplot(aes(x=alcohol, y=quality), data=wines) +
-    geom_point()
+ggplot(aes(y=alcohol, x=quality), data=wines) +
+    geom_boxplot()
 
-qplot(data = wines, x = alcohol) +
-  facet_wrap(~quality)
-qplot(data = wines, x = pH) +
-  facet_wrap(~quality)
+
 ```
 
 # Bivariate Analysis
 
 ### Talk about some of the relationships you observed in this part of the investigation. How did the feature(s) of interest vary with other features in the dataset?
 
+
+Variables that don't change much with quality..
+- fixed.acidity
+- resdiual.sugar
+- chlorides
+
+Variables that decrease as the quality gets higher...
+- volatile.acidity
+- density
+- pH
+
+Variables that increase as the quality gets higher
+- citric.acid
+- sulphates
+- alcohol
+
+
 ### Did you observe any interesting relationships between the other features (not the main feature(s) of interest)?
 
 ### What was the strongest relationship you found?
 
 
+```{r}
+abs(round(cor(wines[,-c(12,13)]),3))
+```
 
+The strongest relationship is between pH and fixed.acidity(0.683)
 
 # Multivariate Plots Section
 
 ```{r echo=FALSE, Multivariate_Plots}
+multi_varients <- combn(names(wines)[-c(12,13)],2)
 
+for (i in 1:ncol(multi_varients)){
+  p <- ggplot(aes(y=wines[,multi_varients[2,i]], x=wines[,multi_varients[1,i]], colour = quality), data = wines) +
+          geom_point()
+  plot(p)
+}
 ```
 
 # Multivariate Analysis
 
 ### Talk about some of the relationships you observed in this part of the investigation. Were there features that strengthened each other in terms of looking at your feature(s) of interest?
 
+Below variables, together seems to have a interesting relationships for distingushing between higher quality and lower quality wines
+- alcohol & chlorides
+- alcohol & volatile.acidity
+- alcohol & sulphates
+- sulphates & volatile.acidity
+
 ### Were there any interesting or surprising interactions between features?
+No, didn't see any worth mentioning.
 
 ### OPTIONAL: Did you create any models with your dataset? Discuss the strengths and limitations of your model.
 
@@ -127,27 +176,62 @@ qplot(data = wines, x = pH) +
 
 ### Plot One
 ```{r echo=FALSE, Plot_One}
-
+qplot(data = wines, x = quality)
 ```
 
 ### Description One
-
+A very high number of wines are of the the quality 5 or 6(> 4/5ths).
 
 ### Plot Two
 ```{r echo=FALSE, Plot_Two}
+volatile_acidity <- ggplot(aes(y=volatile.acidity, x=quality), data=wines) +
+    geom_boxplot()
+
+citric_acid <-ggplot(aes(y=citric.acid, x=quality), data=wines) +
+    geom_boxplot()
+
+density <-ggplot(aes(y=density, x=quality), data=wines) +
+    geom_boxplot()
+
+ph <-ggplot(aes(y=pH, x=quality), data=wines) +
+    geom_boxplot()
+
+sulphates <-ggplot(aes(y=sulphates, x=quality), data=wines) +
+    geom_boxplot()
+
+alcohol <-ggplot(aes(y=alcohol, x=quality), data=wines) +
+    geom_boxplot()
+
+grid.arrange(volatile_acidity, alcohol, density, sulphates, ph, citric_acid, ncol = 2)
+
 
 ```
 
 ### Description Two
-
+As the wine quality increases, the median value of variables sulphates, alcohol & citric.acid increase and the median value of variables volatile.acidity, density & pH decrease.
 
 ### Plot Three
 ```{r echo=FALSE, Plot_Three}
+plot1 <- ggplot(aes(y=alcohol, x=fixed.acidity, colour = quality), data=wines) +
+  geom_point()
+
+plot2 <- ggplot(aes(y=alcohol, x=volatile.acidity, colour = quality), data=wines) +
+  geom_point()
+
+plot3 <- ggplot(aes(y=alcohol, x=chlorides, colour = quality), data=wines) +
+  geom_point()
+
+plot4 <- ggplot(aes(y=sulphates, x=volatile.acidity, colour = quality), data=wines) +
+  geom_point()
+
+grid.arrange(plot1, plot2, plot3, plot4, ncol = 2)
 
 ```
 
 ### Description Three
+Two variables combinations gives us a little bit of insight into the differenc between wines with higher and lower quality.
 
 ------
 
 # Reflection
+We started with trying to find out variables, individually or in combination, that influence the quality of the wine. We conclude that no single variable can by it's own predict the quality of the wine. We would  need to use mutiple variables and do more analysis, proabbly with more data. 
