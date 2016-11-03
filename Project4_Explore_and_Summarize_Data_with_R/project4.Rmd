@@ -176,7 +176,10 @@ No, didn't see any worth mentioning.
 
 ### Plot One
 ```{r echo=FALSE, Plot_One}
-qplot(data = wines, x = quality)
+ggplot(aes(x = quality), data = wines)  +
+  geom_bar() +
+  ggtitle("Number of Wines by Quality")
+
 ```
 
 ### Description One
@@ -185,22 +188,28 @@ A very high number of wines are of the the quality 5 or 6(> 4/5ths).
 ### Plot Two
 ```{r echo=FALSE, Plot_Two}
 volatile_acidity <- ggplot(aes(y=volatile.acidity, x=quality), data=wines) +
-    geom_boxplot()
-
+    geom_boxplot() +
+    ggtitle("Quality vs Volatile Acidity")
+  
 citric_acid <-ggplot(aes(y=citric.acid, x=quality), data=wines) +
-    geom_boxplot()
+    geom_boxplot() +
+    ggtitle("Quality vs Citric Acid")
 
 density <-ggplot(aes(y=density, x=quality), data=wines) +
-    geom_boxplot()
+    geom_boxplot() +
+    ggtitle("Quality vs Density")
 
 ph <-ggplot(aes(y=pH, x=quality), data=wines) +
-    geom_boxplot()
+    geom_boxplot() +
+    ggtitle("Quality vs pH")
 
 sulphates <-ggplot(aes(y=sulphates, x=quality), data=wines) +
-    geom_boxplot()
+    geom_boxplot() +
+    ggtitle("Quality vs Sulphates")
 
 alcohol <-ggplot(aes(y=alcohol, x=quality), data=wines) +
-    geom_boxplot()
+    geom_boxplot() +
+    ggtitle("Quality vs alcohol")
 
 grid.arrange(volatile_acidity, alcohol, density, sulphates, ph, citric_acid, ncol = 2)
 
@@ -213,16 +222,20 @@ As the wine quality increases, the median value of variables sulphates, alcohol 
 ### Plot Three
 ```{r echo=FALSE, Plot_Three}
 plot1 <- ggplot(aes(y=alcohol, x=fixed.acidity, colour = quality), data=wines) +
-  geom_point()
+  geom_point() +
+    ggtitle("Alcohol vs Fixed Acidity colored by Quality")
 
 plot2 <- ggplot(aes(y=alcohol, x=volatile.acidity, colour = quality), data=wines) +
-  geom_point()
+  geom_point() +
+  ggtitle("Alcohol vs Volatile Acidity colored by Quality")
 
 plot3 <- ggplot(aes(y=alcohol, x=chlorides, colour = quality), data=wines) +
-  geom_point()
-
+  geom_point() +
+  ggtitle("Alcohol vs chlorides colored by Quality")
+  
 plot4 <- ggplot(aes(y=sulphates, x=volatile.acidity, colour = quality), data=wines) +
-  geom_point()
+  geom_point() +
+  ggtitle("Sulphates vs Volatile Acidity colored by Quality")
 
 grid.arrange(plot1, plot2, plot3, plot4, ncol = 2)
 
