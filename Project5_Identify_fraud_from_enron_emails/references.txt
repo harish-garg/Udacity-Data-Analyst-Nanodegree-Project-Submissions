@@ -1,0 +1,4 @@
+* Udacity Data Analyst NanoDegree Course Content
+* Video: Enron: The smartest guys in the room
+* https://en.wikipedia.org/wiki/Enron_scandal
+* 

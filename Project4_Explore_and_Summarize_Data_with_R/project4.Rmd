@@ -19,26 +19,41 @@ wines <- read.csv("wineQualityReds.csv")
 ```
 
 # Univariate Plots Section
-```{r echo=FALSE, Univariate_Plots}
-head(wines)
-dim(wines)
-names(wines)
-str(wines)
-summary(wines)
-qplot(data = wines, x = quality)
-qplot(data = wines, x = fixed.acidity)
-qplot(data = wines, x = volatile.acidity)
-qplot(data = wines, x = residual.sugar)
-qplot(data = wines, x = chlorides)
-qplot(data = wines, x = free.sulfur.dioxide)
-qplot(data = wines, x = total.sulfur.dioxide)
-qplot(data = wines, x = density)
-qplot(data = wines, x = pH)
-qplot(data = wines, x = sulphates)
-qplot(data = wines, x = alcohol)
+## Plots
+```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots}
+  
+for (i in 2:12){
+    d = density(wines[,i])
+    p1 = qplot(d$x, d$y/sum(d$y), geom = "line") + 
+        xlab(names(wines)[i]) + 
+        ylab("Probability Density") +
+        ggtitle(paste("Distribution of",names(wines)[i]))
+        
+    p2 = ggplot(wines, aes( x = 1, y = wines[i] ) ) + 
+               ylab(names(wines[i])) +
+               geom_jitter(alpha = 0.1 ) +
+               geom_boxplot(alpha = 0.2, color = 'red' ) +
+               ggtitle(paste("Boxplot of outliers for",names(wines)[i]))
+    
+    grid.arrange(p1, p2, ncol=2)
+    print(paste("Summary of", names(wines[i])))
+    print(summary(wines[,i]))
+}
+
+print("Summary of Quality")
 summary(wines$quality)
 table(wines$quality)
+
 ```
+### Observations
+Below are some of the observations on the above plots:
+
+* density and pH seem to have a normal distribution.
+
+* residual.sugar, chlorides, and sulphates seems to have a long tail on the positive side.
+
+* fixed.acidity, volatile.acidity, citric.acid, free.sulfur.dioxide, total.sulfur.dioxide and alcohol seem to have an approx poisson distribution.
+
 
 # Univariate Analysis
 
@@ -53,7 +68,7 @@ We will using the how the 12 independent variables relate to the depedent variab
 ### What other features in the dataset do you think will help support your investigation into your feature(s) of interest?
 Let's begin with finding the correlation between each independent variable and the depedent variable.
 
-```{r}
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 abs(round(cor(wines),3))[-12,"quality"]
 ```
 
@@ -66,94 +81,76 @@ Not yet. Maybe will update this section, if I do create more variables.
 
 We are going to turn the quality variable into a factor as this will help us make it a classfication problem.
 
-```{r}
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 wines$quality = as.factor(wines$quality)
-
-summary(wines$quality)
-table(wines$quality)
 ```
 
 # Bivariate Plots Section
-```{r echo=FALSE, Bivariate_Plots}
-ggplot(aes(y=fixed.acidity, x=quality), data=wines) +
-    geom_boxplot()
+## Plots
+```{r echo=FALSE, message=FALSE, warning=FALSE, Bivariate_Plots}
+p <- ggplot(aes(factor(quality), 
+             alcohol), 
+        data = wines) +
+        xlab("quality") +
+        geom_jitter( alpha = .3)  +
+        geom_boxplot( alpha = .5,color = 'blue')+
+        stat_summary(fun.y = "mean", 
+               geom = "point", 
+               color = "red", 
+               shape = 8, 
+               size = 4)
 
-ggplot(aes(y=volatile.acidity, x=quality), data=wines) +
-    geom_boxplot()
+for (i in 2:12){
+    p <-p %+% aes(y = wines[i]) +
+        ylab(names(wines[i])) +
+        ggtitle(paste(names(wines[i]), "by quality"))
+    plot(p)    
+}
 
-ggplot(aes(y=citric.acid, x=quality), data=wines) +
-    geom_boxplot()
-
-ggplot(aes(y=residual.sugar, x=quality), data=wines) +
-    geom_boxplot()
-
-ggplot(aes(y=chlorides, x=quality), data=wines) +
-    geom_boxplot()
-
-ggplot(aes(y=free.sulfur.dioxide, x=quality), data=wines) +
-    geom_boxplot()
-
-ggplot(aes(y=total.sulfur.dioxide, x=quality), data=wines) +
-    geom_boxplot()
-
-ggplot(aes(y=density, x=quality), data=wines) +
-    geom_boxplot()
-
-ggplot(aes(y=pH, x=quality), data=wines) +
-    geom_boxplot()
-
-ggplot(aes(y=sulphates, x=quality), data=wines) +
-    geom_boxplot()
-
-ggplot(aes(y=alcohol, x=quality), data=wines) +
-    geom_boxplot()
-
+abs(round(cor(wines[,-c(12,13)]),3))
 
 ```
+## Observations
+
+* Variables that don't change much with quality - fixed.acidity, resdiual.sugar, chlorides
+* Variables that decrease as the quality gets higher - volatile.acidity, density, pH
+* Variables that increase as the quality gets higher - citric.acid, sulphates, alcohol
+* There is a strong relationship between pH and fixed.acidity(0.683)
 
 # Bivariate Analysis
 
 ### Talk about some of the relationships you observed in this part of the investigation. How did the feature(s) of interest vary with other features in the dataset?
 
-
-Variables that don't change much with quality..
-- fixed.acidity
-- resdiual.sugar
-- chlorides
-
-Variables that decrease as the quality gets higher...
-- volatile.acidity
-- density
-- pH
-
-Variables that increase as the quality gets higher
-- citric.acid
-- sulphates
-- alcohol
-
+volatile.acidity, density, pH, citric.acid, sulphates and alcohol values change as the quality changes.
 
 ### Did you observe any interesting relationships between the other features (not the main feature(s) of interest)?
 
 ### What was the strongest relationship you found?
-
-
-```{r}
-abs(round(cor(wines[,-c(12,13)]),3))
-```
-
 The strongest relationship is between pH and fixed.acidity(0.683)
 
 # Multivariate Plots Section
-
-```{r echo=FALSE, Multivariate_Plots}
+## Plots
+```{r echo=FALSE, message=FALSE, warning=FALSE, Multivariate_Plots}
 multi_varients <- combn(names(wines)[-c(12,13)],2)
-
 for (i in 1:ncol(multi_varients)){
-  p <- ggplot(aes(y=wines[,multi_varients[2,i]], x=wines[,multi_varients[1,i]], colour = quality), data = wines) +
-          geom_point()
+  p <- ggplot(aes(y=wines[,multi_varients[2,i]],
+                  x=wines[,multi_varients[1,i]], 
+                  colour = factor(quality)), data = wines) +
+          xlab(multi_varients[1,i]) +
+          ylab(multi_varients[2,i]) +
+          geom_point(alpha = 0.8, size = 2) +
+          geom_smooth(method = "lm", se = FALSE,size=1)  +
+                scale_color_brewer(type='seq',
+                guide=guide_legend(title='Quality')) +
+          ggtitle(paste(multi_varients[1,i], "by",
+                        multi_varients[2,i], "colored by quality"))
   plot(p)
 }
+
 ```
+
+## Observations
+Here, we are trying to find the correct combination of variables to distinguish the high quality wines from low quality. We talk about the analysis below.
 
 # Multivariate Analysis
 
@@ -175,7 +172,7 @@ No, didn't see any worth mentioning.
 # Final Plots and Summary
 
 ### Plot One
-```{r echo=FALSE, Plot_One}
+```{r echo=FALSE, warning=FALSE,Plot_One}
 ggplot(aes(x = quality), data = wines)  +
   geom_bar() +
   ggtitle("Number of Wines by Quality")
@@ -186,33 +183,41 @@ ggplot(aes(x = quality), data = wines)  +
 A very high number of wines are of the the quality 5 or 6(> 4/5ths).
 
 ### Plot Two
-```{r echo=FALSE, Plot_Two}
-volatile_acidity <- ggplot(aes(y=volatile.acidity, x=quality), data=wines) +
-    geom_boxplot() +
+```{r echo=FALSE, message=FALSE, warning=FALSE, Plot_Two}
+bi_plot <- ggplot(aes(factor(quality), 
+                volatile.acidity), 
+            data = wines) +
+            xlab("quality") +
+            geom_jitter( alpha = .3)  +
+            geom_boxplot( alpha = .5,color = 'blue')+
+            stat_summary(fun.y = "mean", 
+                 geom = "point", 
+                 color = "red", 
+                 shape = 8, 
+                 size = 4)
+            
+volatile_acidity <- bi_plot %+% aes(y = volatile.acidity) +
     ggtitle("Quality vs Volatile Acidity")
-  
-citric_acid <-ggplot(aes(y=citric.acid, x=quality), data=wines) +
-    geom_boxplot() +
+
+alcohol <- bi_plot %+% aes(y = alcohol) +
+              ylab("Alcohol %") +
+              ggtitle("Quality vs Alcohol")
+
+citric_acid <- bi_plot %+% aes(y = citric.acid) +
     ggtitle("Quality vs Citric Acid")
 
-density <-ggplot(aes(y=density, x=quality), data=wines) +
-    geom_boxplot() +
+density <- bi_plot %+% aes(y = density) +
     ggtitle("Quality vs Density")
 
-ph <-ggplot(aes(y=pH, x=quality), data=wines) +
-    geom_boxplot() +
+ph <- bi_plot %+% aes(y = pH) +
     ggtitle("Quality vs pH")
 
-sulphates <-ggplot(aes(y=sulphates, x=quality), data=wines) +
-    geom_boxplot() +
+sulphates <- bi_plot %+% aes(y = sulphates) +
     ggtitle("Quality vs Sulphates")
 
-alcohol <-ggplot(aes(y=alcohol, x=quality), data=wines) +
-    geom_boxplot() +
-    ggtitle("Quality vs alcohol")
 
-grid.arrange(volatile_acidity, alcohol, density, sulphates, ph, citric_acid, ncol = 2)
-
+grid.arrange(volatile_acidity, alcohol, density, sulphates, ph, 
+             citric_acid, ncol = 2)
 
 ```
 
@@ -220,24 +225,27 @@ grid.arrange(volatile_acidity, alcohol, density, sulphates, ph, citric_acid, nco
 As the wine quality increases, the median value of variables sulphates, alcohol & citric.acid increase and the median value of variables volatile.acidity, density & pH decrease.
 
 ### Plot Three
-```{r echo=FALSE, Plot_Three}
-plot1 <- ggplot(aes(y=alcohol, x=fixed.acidity, colour = quality), data=wines) +
-  geom_point() +
-    ggtitle("Alcohol vs Fixed Acidity colored by Quality")
+```{r echo=FALSE, message=FALSE, warnings=FALSE,  Plot_Three}
 
-plot2 <- ggplot(aes(y=alcohol, x=volatile.acidity, colour = quality), data=wines) +
-  geom_point() +
-  ggtitle("Alcohol vs Volatile Acidity colored by Quality")
+p <- ggplot(aes(x = alcohol, 
+            y = sulphates  , color = factor(quality)), 
+        data = wines) +
+        geom_point(alpha = 0.8, size = 2) +
+        geom_smooth(method = "lm", se = FALSE,size=1)  +
+        scale_color_brewer(type='seq',
+                     guide=guide_legend(title='Quality'))
 
-plot3 <- ggplot(aes(y=alcohol, x=chlorides, colour = quality), data=wines) +
-  geom_point() +
-  ggtitle("Alcohol vs chlorides colored by Quality")
+p %+% aes(y=alcohol, x=fixed.acidity, colour = factor(quality)) +
+    ggtitle("Alcohol % vs Fixed Acidity colored by Quality")
+
+p %+% aes(y=alcohol, x=volatile.acidity, colour = factor(quality)) +
+  ggtitle("Alcohol % vs Volatile Acidity colored by Quality")
+
+p %+% aes(y=alcohol, x=chlorides, colour = factor(quality)) +
+  ggtitle("Alcohol % vs chlorides colored by Quality")
   
-plot4 <- ggplot(aes(y=sulphates, x=volatile.acidity, colour = quality), data=wines) +
-  geom_point() +
+p %+% aes(y=sulphates, x=volatile.acidity, colour = factor(quality)) +
   ggtitle("Sulphates vs Volatile Acidity colored by Quality")
-
-grid.arrange(plot1, plot2, plot3, plot4, ncol = 2)
 
 ```
 
@@ -247,4 +255,6 @@ Two variables combinations gives us a little bit of insight into the differenc b
 ------
 
 # Reflection
-We started with trying to find out variables, individually or in combination, that influence the quality of the wine. We conclude that no single variable can by it's own predict the quality of the wine. We would  need to use mutiple variables and do more analysis, proabbly with more data. 
+I started with printing some basis summary of the dataset and plotting the univariate plots. The dataset looked good for analysis so far. However, once I reached the bivariate analysis and trying to find the impact any of the independent variables have on quality, no clear winner emerged, which was quite discouraging in the begining.
+
+In conlusion, We started with trying to find out variables, individually or in combination, that influence the quality of the wine. We conclude that no single variable can by it's own predict the quality of the wine. We would  need to use mutiple variables and do more analysis, proabbly with more data. 
