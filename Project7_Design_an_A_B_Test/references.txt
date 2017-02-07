@@ -1,2 +1,13 @@
-* Udacity Data Analyst Degree Course Content
-*
+References... (in no particular oder)
+
+* Udacity Data Analyst Degree Course Content (Stastics, Design an A/B Test)
+* https://blog.kissmetrics.com/ab-testing-introduction/
+* https://www.smashingmagazine.com/2010/06/the-ultimate-guide-to-a-b-testing/
+* https://blog.bufferapp.com/how-buffer-ab-tests
+* http://mathworld.wolfram.com/BonferroniCorrection.html
+* https://en.wikipedia.org/wiki/Bonferroni_correction
+* http://support.minitab.com/en-us/minitab/17/topic-library/basic-statistics-and-graphs/hypothesis-tests/basics/type-i-and-type-ii-error/
+* http://www.stat.berkeley.edu/~mgoldman/Section0402.pdf
+* http://www.utdallas.edu/~herve/Abdi-Bonferroni2007-pretty.pdf
+* http://onlinelibrary.wiley.com/doi/10.1111/opo.12131/full
+* Udacity Project Review Notes from my own previous submissions. 
