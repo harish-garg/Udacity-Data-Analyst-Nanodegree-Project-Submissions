@@ -10,6 +10,3 @@ Here, I downloaded the bengaluru_india.osm.bz2 file.
 The download size of the archived dataset is 38M
 
 The unachived dataset size is 610M
-
-
-

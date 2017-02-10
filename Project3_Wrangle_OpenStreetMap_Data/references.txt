@@ -2,3 +2,6 @@
 * http://wiki.openstreetmap.org/wiki/OSM_XML
 * https://mapzen.com/
 * Udacity Data Analyst Nanodegree
+* https://www.udacity.com/wiki/ud032
+* Mongodb documentation
+* http://www.mapsofindia.com/pincode/india/karnataka/bangalore/
