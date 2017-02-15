@@ -89,14 +89,14 @@ should be turned into
 # data file
 full_data = "/home/harish/datasets/bengaluru_india.osm" 
 sample_medium = "/home/harish/datasets/sampleK10.osm"
-sample_small = "sampleK100.osm"
+sample_small = "sample.osm"
 south = "/home/harish/datasets/ex_hz6cRB8dF5qcLXwsWPkDFp4KQKf28.osm"
-OSMFILE = south
+OSMFILE = sample_medium
 
 lower = re.compile(r'^([a-z]|_)*$')
 lower_colon = re.compile(r'^([a-z]|_)*:([a-z]|_)*$')
 problemchars = re.compile(r'[=\+/&<>;\'"\?%#$@\,\. \t\r\n]')
-postal_codes = re.compile(r'^56[0-9][0-9][0-9][0-9]')
+postal_codes = re.compile(r'^5[0-9][0-9][0-9][0-9][0-9]')
 street_types_re = re.compile(r'\b\S+\.?$', re.IGNORECASE)
 
 CREATED = [ "version", "changeset", "timestamp", "user", "uid"]
@@ -119,7 +119,6 @@ street_mapping = { "ROad": "Road",
                 }
             
 fixed_street_names = []
-bad_postal_codes = []
 
 def audit_street_type(street_name):
     match = street_types_re.search(street_name)
@@ -134,9 +133,10 @@ def audit_street_type(street_name):
 def update_street_name(name, mapping):
     for key in mapping.iterkeys():
         if re.search(key, name):
-            name = re.sub(key, mapping[key], name)
-            fixed_street_names.append(name)
-
+            fixed_name = re.sub(key, mapping[key], name)
+            #fixed_street_names.append(name)
+            pprint.pprint(name + "=>>" + fixed_name)
+            name = fixed_name     
     return name
     
 def is_street_name(address_key):
@@ -144,16 +144,19 @@ def is_street_name(address_key):
 
 
 def audit_postal_code(postal_code):
-    postal_code = postal_code.upper()
     if postal_codes.match(postal_code):
         return postal_code
 
-    bad_postal_codes.append(postal_code)
-    return postal_code
+    else:
+        fixed_postal_code = postal_code.replace(" ", "")
+        pprint.pprint("Changed " + postal_code + " to " + fixed_postal_code)
+        return fixed_postal_code
 
 
 def is_postal_code(address_key):
     return address_key == 'addr:postcode'    
+
+
 
 
 def shape_element(element):
@@ -182,7 +185,7 @@ def shape_element(element):
                 continue
             elif k.startswith('addr:'):
                 address = k.split(':')
-                pprint.pprint(address)
+                #pprint.pprint(address)
                 if len(address) == 2:
                     if 'address' not in node:
                         node['address'] = {}
@@ -190,7 +193,7 @@ def shape_element(element):
                         v = audit_street_type(v)
                     if is_postal_code(k):
                         v = audit_postal_code(v)
-                    pprint.pprint(v)
+                    
                     node['address'][address[1]] = v
             else:
                 node[k] = v
@@ -222,34 +225,7 @@ def process_map(file_in, pretty = False):
                     fo.write(json.dumps(el) + "\n")
     return data
 
-def test():
-    # NOTE: if you are running this code on your computer, with a larger dataset, 
-    # call the process_map procedure with pretty=False. The pretty=True option adds 
-    # additional spaces to the output, making it significantly larger.
-    data = process_map(OSMFILE, False)
-    #pprint.pprint(data)
-    
-    correct_first_elem = {
-        "id": "261114295", 
-        "visible": "true", 
-        "type": "node", 
-        "pos": [41.9730791, -87.6866303], 
-        "created": {
-            "changeset": "11129782", 
-            "user": "bbmiller", 
-            "version": "7", 
-            "uid": "451048", 
-            "timestamp": "2012-03-28T18:31:23Z"
-        }
-    }
-    """
-    assert data[0] == correct_first_elem
-    assert data[-1]["address"] == {
-                                    "street": "West Lexington St.", 
-                                    "housenumber": "1412"
-                                      }
-    assert data[-1]["node_refs"] == [ "2199822281", "2199822390",  "2199822392", "2199822369", 
-                                    "2199822370", "2199822284", "2199822281"]
-    """
-if __name__ == "__main__":
-    test()
+# proces the datafile and generate a JSOn
+process_map(OSMFILE, False)
+
+

@@ -12,9 +12,9 @@ The function process_map should return a set of unique user IDs ("uid")
 """
 full_data = "/home/harish/datasets/bengaluru_india.osm" 
 sample_medium = "/home/harish/datasets/sampleK10.osm"
-sample_small = "sampleK100.osm"
+sample_small = "../sample.osm"
 south = "/home/harish/datasets/ex_hz6cRB8dF5qcLXwsWPkDFp4KQKf28.osm"
-OSMFILE = sample_medium
+OSMFILE = sample_small
 
 def get_user(element):
     return
