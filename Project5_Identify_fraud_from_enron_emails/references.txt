@@ -1,4 +1,19 @@
+References and materials referred during the project
+ 
 * Udacity Data Analyst NanoDegree Course Content
 * Video: Enron: The smartest guys in the room
 * https://en.wikipedia.org/wiki/Enron_scandal
-* 
+* http://scikit-learn.org/stable/modules/grid_search.html
+* http://scikit-learn.org/stable/modules/pipeline.html#pipeline
+* http://sebastianraschka.com/Articles/2014_ensemble_classifier.html#Appendix-III—GridSearch-Support
+* http://napitupulu-jon.appspot.com/posts/evaluation-ud120.html
+* https://www.udacity.com/course/viewer#!/c-ud120
+* https://github.com/sebasibarguen/udacity-nanodegree-machinelearning#investigating-enrons-scandal-using-machine-learning
+* https://github.com/allanbreyes/udacity-data-science/tree/master/p4
+* http://scikit-learn.org/stable/model_selection.html#model-selection
+* http://scikit-learn.org/stable/index.html
+* http://orenov.github.io/mlproject.html
+* http://en.wikipedia.org/wiki/Precision_and_recall
+* https://github.com/davidventuri/udacity-dand/tree/master/p5
+* Udacity Forum ML threads
+* StackOverFlow scikit-learn posts
